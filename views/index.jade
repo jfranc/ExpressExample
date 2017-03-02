@@ -1,5 +1,19 @@
-extends layout
+doctype html
+html(ng-app="miApp")
+  head
+    base(href="/")
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/loader.css')
 
-block content
-  h1= title
-  p Welcome to #{title}
+  body(ng-controller="appCtrl")
+    button(ui-sref="registro") Registro
+    ui-view
+
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js")
+  script(src="/angularjs/app.js")
+  script(src="/angularjs/ctrls/appCtrl.js")
+  script(src="/angularjs/ctrls/loginCtrl.js")
+  script(src="/angularjs/ctrls/listCtrl.js")
+  script(src="/angularjs/ctrls/registerCtrl.js")

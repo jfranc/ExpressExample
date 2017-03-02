@@ -1,5 +1,6 @@
-const app = angular.module("miApp", []);
-app.controller("listCtrl", function($scope, $http, $timeout) {
+
+angular.module("miApp")
+    .controller("listCtrl", function($scope, $http, $timeout) {
 
     $scope.loading= true;
 

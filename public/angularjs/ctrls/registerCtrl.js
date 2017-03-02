@@ -1,5 +1,6 @@
-const app = angular.module("miApp", []);
-app.controller("registerCtrl", function($scope, $http, $timeout, $window) {
+
+angular.module("miApp")
+    .controller("registerCtrl", function($scope, $http, $timeout, $window) {
 
     $scope.loading= false;
     $scope.invalidForm= false;

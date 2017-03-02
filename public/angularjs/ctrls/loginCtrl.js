@@ -1,5 +1,6 @@
-const app = angular.module("miApp", []);
-app.controller("loginCtrl", function($scope, $http, $timeout, $window) {
+
+angular.module("miApp")
+    .controller("loginCtrl", function($scope, $http, $timeout, $window) {
 
     $scope.invalidLogin= false;
     $scope.isLoging= false;
