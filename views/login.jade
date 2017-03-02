@@ -1,0 +1,21 @@
+doctype html
+html(ng-app="miApp")
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/stylesheets/loader.css')
+
+    body(ng-controller="loginCtrl")
+        div
+            h1 Introduzca sus datos de autenticación
+            block content
+                p(ng-show="invalidLogin").red El nombre de usuario o contraseña son incorrectos.
+                input(type="text", placeholder="login", ng-model="login")
+                input(type="password", placeholder="password", ng-model="password")
+                br
+                div(ng-if="isLoging").loader
+                button(ng-hide="isLoging" ng-click="autenticar()") Autenticarse
+                a(href="./register").registro Registrar nuevo usuario
+
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
+    script(src="/angularjs/ctrls/loginCtrl.js")

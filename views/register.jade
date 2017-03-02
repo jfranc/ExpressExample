@@ -1,0 +1,24 @@
+doctype html
+html(ng-app="miApp")
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/stylesheets/loader.css')
+
+    body(ng-controller="registerCtrl")
+        h1 Registro de usuarios
+
+        block content
+            p(ng-if="invalidForm").red No ha rellenado correctamente todos los datos.
+            p(ng-if="invalidLogin").red El login de usuario ya existe.
+            input(type="text", placeholder="name", ng-model="name", required)
+            input(type="text", placeholder="login", ng-model="login", required)
+            input(type="password", placeholder="password", ng-model="password", required)
+            br
+            div(ng-if="loading").loader
+            button(ng-hide="loading" ng-click="register()") Registrar
+            a(href="./login").registro Volver a la autenticación
+
+
+    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
+    script(src="/angularjs/ctrls/registerCtrl.js")
