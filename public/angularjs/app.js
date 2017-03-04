@@ -4,7 +4,31 @@ app.config(function($stateProvider, $locationProvider) {
     $stateProvider.state({
         name: "registro",
         url: "/registro",
-        templateUrl: "/registro"
+        templateUrl: "/templates/registro"
+    });
+
+    $stateProvider.state({
+        name: "login",
+        url: "/login",
+        templateUrl: "/views/login"
+    });
+
+    $stateProvider.state({
+        name: "home",
+        url: "/",
+        templateUrl: "/views/login"
+    });
+
+    $stateProvider.state({
+        name: "list",
+        url: "/list",
+        templateUrl: "/views/list"
+    });
+
+    $stateProvider.state({
+        name: "register",
+        url: "/register",
+        templateUrl: "/views/register"
     });
 
     $locationProvider.html5Mode(true);

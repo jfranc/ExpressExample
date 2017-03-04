@@ -12,7 +12,7 @@ angular.module("miApp")
 
         $timeout( function(){
 
-            $http.post("/checkLogin", {"login": $scope.login, "password": $scope.password}).then(
+            $http.post("/rest/checkLogin", {"login": $scope.login, "password": $scope.password}).then(
                 function(response) {
                     if(response.data.validLogin) {
                         $window.location.href = '/list';

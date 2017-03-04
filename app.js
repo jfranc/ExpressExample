@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var templates = require('./routes/templates');
+var rest = require('./routes/rest');
+var views = require('./routes/views');
 
 var app = express();
 
@@ -22,6 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Menos restrictivo a más restrictivo
+app.use('/rest', rest);
+app.use('/templates', templates);
+app.use('/views', views);
 app.use('/', index);
 app.use('/users', users);
 

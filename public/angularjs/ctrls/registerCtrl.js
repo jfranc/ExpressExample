@@ -15,7 +15,7 @@ angular.module("miApp")
             $scope.invalidLogin= false;
 
             $timeout( function(){
-                $http.post("/register", {"name": $scope.name, "login": $scope.login, "password": $scope.password }).then(
+                $http.post("/rest/register", {"name": $scope.name, "login": $scope.login, "password": $scope.password }).then(
                     function(response) {
                         if(response.data.validUser) {
                             $window.location.href = '/list';

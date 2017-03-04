@@ -1,26 +1,13 @@
-doctype html
-html(ng-app="miApp")
-    head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        link(rel='stylesheet', href='/stylesheets/loader.css')
+div(ng-controller="listCtrl as lCtrl")
+    h1 Listado de usuarios
 
-    body(ng-controller="listCtrl")
-        h1 Listado de usuarios
+    block content
+        div(ng-if="lCtrl.loading").loader
+        button(ng-hide="lCtrl.loading" ng-click="lCtrl.actualizarListaUsuarios()") Refrescar
+        a(href="./login").registro Volver a la autenticación
 
-        block content
-            div(ng-if="loading").loader
-            button(ng-hide="loading" ng-click="actualizarListaUsuarios()") Refrescar
-            a(href="./login").registro Volver a la autenticación
-
-            div(ng-hide="loading")
-             p(ng-if="usersList.length == 0") No existen usuarios en el sistema.
-                ul(ng-if="usersList.length > 0")
-                    li(ng-repeat="user in usersList")
+        div(ng-hide="lCtrl.loading")
+            p(ng-if="lCtrl.usersList.length == 0") No existen usuarios en el sistema.
+                ul(ng-if="lCtrl.usersList.length > 0")
+                    li(ng-repeat="user in lCtrl.usersList")
                         | {{ user.name }} ({{user.login}})
-
-    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js")
-    script(src="/angularjs/app.js")
-    script(src="/angularjs/ctrls/listCtrl.js")
-

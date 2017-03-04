@@ -6,7 +6,7 @@ html(ng-app="miApp")
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/loader.css')
 
-  body(ng-controller="appCtrl")
+  body(ng-controller="appCtrl as aCtrl")
     button(ui-sref="registro") Registro
     ui-view
 
