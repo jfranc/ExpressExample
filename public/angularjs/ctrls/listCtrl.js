@@ -1,16 +1,19 @@
-const app = angular.module("miApp", []);
-app.controller("listCtrl", function($scope, $http, $timeout) {
 
-    $scope.loading= true;
+angular.module("miApp")
+    .controller("listCtrl", function($http, $timeout) {
+
+        var vm= this;
+
+        vm.loading= true;
 
     function actualizarListaUsuarios() {
-        $scope.loading= true;
+        vm.loading= true;
 
         $timeout( function(){
-            $http.get('/listUsuarios').then(
+            $http.get('/rest/listUsuarios').then(
                 function(response) {
-                    $scope.usersList = response.data.usersList ? response.data.usersList : [];
-                    $scope.loading= false;
+                    vm.usersList = response.data.usersList ? response.data.usersList : [];
+                    vm.loading= false;
                 },
                 function(request) {
                     console.log('Error: ' + response.data);
@@ -19,7 +22,7 @@ app.controller("listCtrl", function($scope, $http, $timeout) {
         }, 1000 );
     };
 
-    $scope.actualizarListaUsuarios= actualizarListaUsuarios;
+    vm.actualizarListaUsuarios= actualizarListaUsuarios;
 
     actualizarListaUsuarios();
 });

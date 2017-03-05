@@ -1,24 +1,15 @@
-doctype html
-html(ng-app="miApp")
-    head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        link(rel='stylesheet', href='/stylesheets/loader.css')
+div(ng-controller="listCtrl as ctrl")
+    h1 Listado de usuarios
 
-    body(ng-controller="listCtrl")
-        h1 Listado de usuarios
-
-        block content
-            div(ng-if="loading").loader
-            button(ng-hide="loading" ng-click="actualizarListaUsuarios()") Refrescar
-            a(href="./login").registro Volver a la autenticación
-
-            div(ng-hide="loading")
-             p(ng-if="usersList.length == 0") No existen usuarios en el sistema.
-                ul(ng-if="usersList.length > 0")
-                    li(ng-repeat="user in usersList")
+    block content
+        div(ng-if="ctrl.loading").loader
+        button(ng-hide="ctrl.loading" ng-click="ctrl.actualizarListaUsuarios()") Refresh
+        a(ui-sref="login" ui-sref-active="active" style="margin-left: 10px;").registro Get back
+        br
+        br
+        div(ng-hide="ctrl.loading")
+            p(ng-if="ctrl.usersList.length == 0") No existen usuarios en el sistema.
+                ul(ng-if="ctrl.usersList.length > 0").list-group
+                    li(ng-repeat="user in ctrl.usersList").list-group-item
                         | {{ user.name }} ({{user.login}})
-
-    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
-    script(src="/angularjs/ctrls/listCtrl.js")
 

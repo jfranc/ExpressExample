@@ -1,24 +1,26 @@
-const app = angular.module("miApp", []);
-app.controller("loginCtrl", function($scope, $http, $timeout, $window) {
+angular.module("miApp")
+    .controller("loginCtrl", function($http, $timeout, $window, $state) {
+        
+    const vm= this;
+        
+    vm.invalidLogin= false;
+    vm.isLoading= false;
 
-    $scope.invalidLogin= false;
-    $scope.isLoging= false;
+    vm.autenticar= function() {
 
-    $scope.autenticar= function() {
-
-        $scope.invalidLogin= false;
-        $scope.isLoging= true;
+        vm.invalidLogin= false;
+        vm.isLoading= true;
 
         $timeout( function(){
 
-            $http.post("/checkLogin", {"login": $scope.login, "password": $scope.password}).then(
+            $http.post("/rest/checkLogin", {"login": vm.login, "password": vm.password}).then(
                 function(response) {
                     if(response.data.validLogin) {
-                        $window.location.href = '/list';
+                        $state.transitionTo('list');
                     }
                     else {
-                        $scope.invalidLogin= true;
-                        $scope.isLoging= false;
+                        vm.invalidLogin= true;
+                        vm.isLoading= false;
                     }
 
                     exit();
@@ -33,7 +35,6 @@ app.controller("loginCtrl", function($scope, $http, $timeout, $window) {
     };
 
     function exit() {
-
         console.log("EXIT");
     }
 

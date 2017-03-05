@@ -1,21 +1,15 @@
-doctype html
-html(ng-app="miApp")
-    head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        link(rel='stylesheet', href='/stylesheets/loader.css')
+div(ng-controller="loginCtrl as ctrl")
+    .alert(ng-show="ctrl.invalidLogin").alert-danger(role='alert') El nombre de usuario o contraseña son incorrectos.
+    form
+        .form-group
+            label(for='Username') Username
+            input#Username.form-control(type='text', placeholder='Username', ng-model="ctrl.login")
+        .form-group
+            label(for='Password') Password
+            input#Password.form-control(type='password', placeholder='Password', ng-model="ctrl.password")
 
-    body(ng-controller="loginCtrl")
-        div
-            h1 Introduzca sus datos de autenticación
-            block content
-                p(ng-show="invalidLogin").red El nombre de usuario o contraseña son incorrectos.
-                input(type="text", placeholder="login", ng-model="login")
-                input(type="password", placeholder="password", ng-model="password")
-                br
-                div(ng-if="isLoging").loader
-                button(ng-hide="isLoging" ng-click="autenticar()") Autenticarse
-                a(href="./register").registro Registrar nuevo usuario
+        div(ng-if="ctrl.isLoading").loader
+        button.btn.btn-default(ng-hide="ctrl.isLoading" ng-click="ctrl.autenticar()") Login
+        a(ui-sref="register" ui-sref-active="active" style="margin-left: 10px;").registro Don't have an account! Sign Up Here
 
-    script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js")
-    script(src="/angularjs/ctrls/loginCtrl.js")
+
