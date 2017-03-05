@@ -1,13 +1,15 @@
-div(ng-controller="listCtrl as lCtrl")
+div(ng-controller="listCtrl as ctrl")
     h1 Listado de usuarios
 
     block content
-        div(ng-if="lCtrl.loading").loader
-        button(ng-hide="lCtrl.loading" ng-click="lCtrl.actualizarListaUsuarios()") Refrescar
-        a(href="./login").registro Volver a la autenticación
-
-        div(ng-hide="lCtrl.loading")
-            p(ng-if="lCtrl.usersList.length == 0") No existen usuarios en el sistema.
-                ul(ng-if="lCtrl.usersList.length > 0")
-                    li(ng-repeat="user in lCtrl.usersList")
+        div(ng-if="ctrl.loading").loader
+        button(ng-hide="ctrl.loading" ng-click="ctrl.actualizarListaUsuarios()") Refresh
+        a(ui-sref="login" ui-sref-active="active" style="margin-left: 10px;").registro Get back
+        br
+        br
+        div(ng-hide="ctrl.loading")
+            p(ng-if="ctrl.usersList.length == 0") No existen usuarios en el sistema.
+                ul(ng-if="ctrl.usersList.length > 0").list-group
+                    li(ng-repeat="user in ctrl.usersList").list-group-item
                         | {{ user.name }} ({{user.login}})
+

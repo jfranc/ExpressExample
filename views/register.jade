@@ -1,13 +1,20 @@
-div(ng-controller="registerCtrl")
-    h1 Registro de usuarios
+div(ng-controller="registerCtrl as ctrl")
+    h1 New User Registration
 
-    block content
-        p(ng-if="invalidForm").red No ha rellenado correctamente todos los datos.
-        p(ng-if="invalidLogin").red El login de usuario ya existe.
-        input(type="text", placeholder="name", ng-model="name", required)
-        input(type="text", placeholder="login", ng-model="login", required)
-        input(type="password", placeholder="password", ng-model="password", required)
-        br
-        div(ng-if="loading").loader
-        button(ng-hide="loading" ng-click="register()") Registrar
-        a(href="./login").registro Volver a la autenticación
+    .alert(ng-show="ctrl.invalidForm").alert-danger(role='alert') No ha rellenado correctamente todos los datos.
+    .alert(ng-show="ctrl.invalidLogin").alert-danger(role='alert') El login de usuario ya existe.
+
+    form
+        .form-group
+            label(for='Username') Username
+            input#Username.form-control(type='text', placeholder='Username', ng-model="ctrl.name")
+        .form-group
+            label(for='Login') Username
+            input#Login.form-control(type='text', placeholder='Login', ng-model="ctrl.login")
+        .form-group
+            label(for='Password') Password
+            input#Password.form-control(type='password', placeholder='Password', ng-model="ctrl.password")
+
+        div(ng-if="ctrl.isLoading").loader
+        button.btn.btn-default(ng-hide="ctrl.isLoading" ng-click="ctrl.register()") Sign up
+        a(ui-sref="home" ui-sref-active="active" style="margin-left: 10px;").registro Get back

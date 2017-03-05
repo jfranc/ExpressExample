@@ -1,46 +1,48 @@
 
 angular.module("miApp")
-    .controller("registerCtrl", function($scope, $http, $timeout, $window) {
+    .controller("registerCtrl", function($http, $timeout, $window, $state) {
 
-    $scope.loading= false;
-    $scope.invalidForm= false;
-    $scope.invalidLogin= false;
+    const vm= this;
 
-    $scope.register= function() {
+    vm.isLoading= false;
+    vm.invalidForm= false;
+    vm.invalidLogin= false;
 
-        if($scope.name && $scope.login && $scope.password) {
+    vm.register= function() {
 
-            $scope.loading= true;
-            $scope.invalidForm= false
-            $scope.invalidLogin= false;
+        if(vm.name && vm.login && vm.password) {
+
+            vm.isLoading= true;
+            vm.invalidForm= false;
+            vm.invalidLogin= false;
 
             $timeout( function(){
-                $http.post("/rest/register", {"name": $scope.name, "login": $scope.login, "password": $scope.password }).then(
+                $http.post("/rest/register", {"name": vm.name, "login": vm.login, "password": vm.password }).then(
                     function(response) {
                         if(response.data.validUser) {
-                            $window.location.href = '/list';
+                            $state.transitionTo('list');
                         } else {
-                            $scope.invalidLogin= true;
-                            $scope.loading= false;
+                            vm.invalidLogin= true;
+                            vm.isLoading= false;
                         }
 
                         exit();
 
                     },
                     function(request) {
-                        $scope.loading= false;
+                        vm.isLoading= false;
                         exit();
                     }
                 );
             }, 1000 );
         }
         else {
-            $scope.invalidForm= true;
-            $scope.loading= false;
-            $scope.invalidLogin= false;
+            vm.invalidForm= true;
+            vm.isLoading= false;
+            vm.invalidLogin= false;
         }
 
-    }
+    };
 
     function exit() {
     }

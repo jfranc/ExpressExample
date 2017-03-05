@@ -2,12 +2,6 @@ const app= angular.module("miApp", ["ui.router"]);
 
 app.config(function($stateProvider, $locationProvider) {
     $stateProvider.state({
-        name: "registro",
-        url: "/registro",
-        templateUrl: "/templates/registro"
-    });
-
-    $stateProvider.state({
         name: "login",
         url: "/login",
         templateUrl: "/views/login"

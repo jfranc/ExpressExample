@@ -4,7 +4,7 @@ const uglify = require("gulp-uglify");
 const plumber = require("gulp-plumber");
 
 gulp.task("min", function() {
-    gulp.src(["public/angularjs/app.js", "public/angularjs/ctrls/**/*.js"])
+    gulp.src(["public/angularjs/miApp.js", "public/angularjs/ctrls/**/*.js"])
         .pipe(plumber())
         .pipe(concat("all.js"))
         .pipe(plumber.stop())
@@ -12,5 +12,5 @@ gulp.task("min", function() {
 });
 
 gulp.task("watch", function() {
-    gulp.watch(["public/angularjs/app.js", "public/angularjs/ctrls/**/*.js"], ["min"]);
+    gulp.watch(["public/angularjs/miApp.js", "public/angularjs/ctrls/**/*.js"], ["min"]);
 });
