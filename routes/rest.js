@@ -12,6 +12,17 @@ var connection= mysql.createConnection({
 
 connection.connect();
 
+function midlewareAuth(req, res, next ) {
+    if(req.query.auth != "1") {
+        res
+            .status(400)
+            .json({ code: "ERROR_AUTH", msg: "Error de autenticación." });
+    }
+    else {
+        next();
+    }
+}
+
 router.post('/checkLogin', function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ? AND password = ?",
         [req.body.login, req.body.password],
@@ -56,17 +67,6 @@ router.post('/register', function(req, res, next) {
             }
         });
 });
-
-function midlewareAuth(req, res, next ) {
-    if(req.query.auth != "1") {
-        res
-            .status(400)
-            .json({ code: "ERROR_AUTH", msg: "Error de autenticación." });
-    }
-    else {
-        next();
-    }
-}
 
 router.get('/listUsuarios', midlewareAuth, function(req, res, next) {
     connection.query('SELECT * FROM usuarios', function (error, results, fields) {
