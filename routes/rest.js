@@ -19,7 +19,7 @@ router.post('/checkLogin', function(req, res, next) {
             if (error) {
                 res
                     .status(400)
-                    .json({ code: 320, msg: "Error al autenticarse." });
+                    .json({ code: "ERROR_LOGIN", msg: "Error al autenticarse." });
             }
             else {
                 if(results.length == 0) {
@@ -37,7 +37,11 @@ router.post('/register', function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ?",
         [req.body.login],
         function(error, results, fields) {
-            if (error) throw error;
+            if (error) {
+                res
+                    .status(400)
+                    .json({ code: "ERROR_REGISTRARSE", msg: "Error al registrarse." });
+            }
             if(results.length != 0) {
                 res.json({ validUser: false });
             }
@@ -53,9 +57,24 @@ router.post('/register', function(req, res, next) {
         });
 });
 
-router.get('/listUsuarios', function(req, res, next) {
+function midlewareAuth(req, res, next ) {
+    if(req.query.auth != "1") {
+        res
+            .status(400)
+            .json({ code: "ERROR_AUTH", msg: "Error de autenticación." });
+    }
+    else {
+        next();
+    }
+}
+
+router.get('/listUsuarios', midlewareAuth, function(req, res, next) {
     connection.query('SELECT * FROM usuarios', function (error, results, fields) {
-        if (error) throw error;
+        if (error) {
+            res
+                .status(400)
+                .json({ code: "ERROR_LISTUSUARIOS", msg: "Error al dar la lista de usuarios." });
+        }
         res.json({ usersList: results });
     });
 });
