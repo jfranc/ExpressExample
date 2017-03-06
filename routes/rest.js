@@ -1,8 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var mysql= require("mysql");
-var connection= mysql.createConnection({
+const Ajv= require("ajv");
+const ajv= new Ajv();
+const mysql= require("mysql");
+const schemas= require("./schemas.js");
+const connection= mysql.createConnection({
     host: "localhost",
     port: "3306",
     user: "jose",
@@ -23,7 +26,27 @@ function midlewareAuth(req, res, next ) {
     }
 }
 
-router.post('/checkLogin', function(req, res, next) {
+// Generator JSON Schemas http://jsonschema.net
+
+function midlewareLoginValidateSchema(req, res, next ) {
+    if(ajv.validate(schemas.login, req.body)) {
+        next();
+    }
+    else {
+        res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
+    }
+}
+
+function midlewareRegisterValidateSchema(req, res, next ) {
+    if(ajv.validate(schemas.register, req.body)) {
+        next();
+    }
+    else {
+        res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
+    }
+}
+
+router.post('/checkLogin', midlewareLoginValidateSchema, function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ? AND password = ?",
         [req.body.login, req.body.password],
         function(error, results, fields) {
@@ -44,7 +67,7 @@ router.post('/checkLogin', function(req, res, next) {
         });
 });
 
-router.post('/register', function(req, res, next) {
+router.post('/register', midlewareRegisterValidateSchema, function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ?",
         [req.body.login],
         function(error, results, fields) {
@@ -54,13 +77,17 @@ router.post('/register', function(req, res, next) {
                     .json({ code: "ERROR_REGISTRARSE", msg: "Error al registrarse." });
             }
             if(results.length != 0) {
-                res.json({ validUser: false });
+                res.json({ validUser: false, msg: "Duplicate user." });
             }
             else {
                 connection.query("INSERT INTO usuarios(name, login, password) VALUES(?, ?, ?)",
                     [req.body.name, req.body.login, req.body.password],
                     function(error, results, fields) {
-                        if (error) throw error;
+                        if (error) {
+                            res
+                                .status(400)
+                                .json({ code: "ERROR_REGISTRARSE", msg: "Error al registrarse." });
+                        }
                         res.json({ validUser: true });
                         console.log(results);
                     });
