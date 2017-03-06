@@ -28,25 +28,18 @@ function midlewareAuth(req, res, next ) {
 
 // Generator JSON Schemas http://jsonschema.net
 
-function midlewareLoginValidateSchema(req, res, next ) {
-    if(ajv.validate(schemas.login, req.body)) {
-        next();
-    }
-    else {
-        res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
-    }
+function midlewareValidateSchema(schema) {
+    return function(req, res, next) {
+        if(ajv.validate(schemas[schema], req.body)) {
+            next();
+        }
+        else {
+            res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
+        }
+    };
 }
 
-function midlewareRegisterValidateSchema(req, res, next ) {
-    if(ajv.validate(schemas.register, req.body)) {
-        next();
-    }
-    else {
-        res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
-    }
-}
-
-router.post('/checkLogin', midlewareLoginValidateSchema, function(req, res, next) {
+router.post('/checkLogin', midlewareValidateSchema("login"), function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ? AND password = ?",
         [req.body.login, req.body.password],
         function(error, results, fields) {
@@ -67,7 +60,7 @@ router.post('/checkLogin', midlewareLoginValidateSchema, function(req, res, next
         });
 });
 
-router.post('/register', midlewareRegisterValidateSchema, function(req, res, next) {
+router.post('/register', midlewareValidateSchema("register"), function(req, res, next) {
     connection.query("SELECT * FROM usuarios WHERE login = ?",
         [req.body.login],
         function(error, results, fields) {
