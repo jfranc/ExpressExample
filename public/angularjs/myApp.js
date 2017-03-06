@@ -1,15 +1,16 @@
 const app= angular.module("miApp", ["ui.router"]);
 
 app.config(function($stateProvider, $locationProvider) {
-    $stateProvider.state({
-        name: "login",
-        url: "/login",
-        templateUrl: "/views/login"
-    });
 
     $stateProvider.state({
         name: "home",
         url: "/",
+        templateUrl: "/views/login"
+    });
+
+    $stateProvider.state({
+        name: "login",
+        url: "/login",
         templateUrl: "/views/login"
     });
 

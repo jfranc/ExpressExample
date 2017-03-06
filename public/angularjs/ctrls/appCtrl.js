@@ -1,5 +1,5 @@
 
 angular.module("miApp")
-    .controller("appCtrl", function($scope, $http, $timeout, $window) {
+    .controller("appCtrl", function($http, $timeout, $window) {
         const vm= this;
     });
