@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 var templates = require('./routes/templates');
 var rest = require('./routes/rest');
 var views = require('./routes/views');
@@ -30,7 +29,6 @@ app.use('/rest', rest);
 app.use('/templates', templates);
 app.use('/views', views);
 app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
