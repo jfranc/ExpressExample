@@ -2,10 +2,7 @@ const moment= require("moment");
 const jwt= require('../libs/jwt.js');
 
 exports.encode = function(payload) {
-    const now= moment.utc();
-    const exp= now.add(15, "s").valueOf();
-
-    return jwt.encode({exp: exp, sub: payload});
+    return jwt.encode({exp: moment.utc().add(24, "h").valueOf(), sub: payload});
 };
 
 exports.checkExp = function(token) {
