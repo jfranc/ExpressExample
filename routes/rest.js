@@ -19,7 +19,7 @@ router.post('/checkLogin', checkSchemas.midlewareValidateSchema("login"), functi
             else {
                 //console.log(errorMessages.lineOfCode());
                 if(results.length == 0) {
-                    resultJson.ok(res, { validLogin: false });
+                    resultJson.error(res, 400, errorMessages.msgs.authUser);
                 }
                 else {
                     resultJson.ok(res, { validLogin: true, token: token.encode(req.body.login) });

@@ -10,7 +10,7 @@ exports.midlewareValidateSchema= function(schema) {
             next();
         }
         else {
-            resultJson.error(res, 400, 1000, "Error al validar:" + schema);
+            resultJson.error(res, 400, 1000, "Error al validar:" + schema + " - Errors: " + ajv.errors);
         }
     };
 };
