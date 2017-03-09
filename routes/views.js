@@ -13,4 +13,8 @@ router.get('/list', function(req, res, next) {
     res.render('list');
 });
 
+router.get('/logout', function(req, res, next) {
+    res.render('logout');
+});
+
 module.exports = router;

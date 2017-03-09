@@ -1,7 +1,6 @@
 div(ng-controller="listCtrl as ctrl")
     h1 Listado de usuarios
-
-    block content
+    block(ng-hide="ctrl.errorAuth") content
         div(ng-if="ctrl.loading").loader
         button(ng-hide="ctrl.loading" ng-click="ctrl.actualizarListaUsuarios()") Refresh
         a(ui-sref="login" ui-sref-active="active" style="margin-left: 10px;").registro Get back

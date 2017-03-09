@@ -1,101 +1,65 @@
 const express = require('express');
 const router = express.Router();
 
-const Ajv= require("ajv");
-const ajv= new Ajv();
-const mysql= require("mysql");
-const schemas= require("./schemas.js");
-const connection= mysql.createConnection({
-    host: "localhost",
-    port: "3306",
-    user: "jose",
-    password: "josejose",
-    database: "login"
-});
+const resultJson= require('../resources/helpers/resultJson.js');
+const errorMessages= require('../resources/helpers/errorMessages.js');
+const db= require('../resources/libs/database.js');
+const jwt= require('../resources/libs/jwt.js');
+const checkSchemas= require('../resources/midleware/checkschemas.js');
+const token= require('../resources/helpers/token.js');
+const auth= require('../resources/midleware/auth.js');
 
-connection.connect();
-
-function midlewareAuth(req, res, next ) {
-    if(req.query.auth != "1") {
-        res
-            .status(400)
-            .json({ code: "ERROR_AUTH", msg: "Error de autenticación." });
-    }
-    else {
-        next();
-    }
-}
-
-// Generator JSON Schemas http://jsonschema.net
-
-function midlewareValidateSchema(schema) {
-    return function(req, res, next) {
-        if(ajv.validate(schemas[schema], req.body)) {
-            next();
-        }
-        else {
-            res.json({ code: "ERROR_VALIDATE", msg: "Error al validar." });
-        }
-    };
-}
-
-router.post('/checkLogin', midlewareValidateSchema("login"), function(req, res, next) {
-    connection.query("SELECT * FROM usuarios WHERE login = ? AND password = ?",
+router.post('/checkLogin', checkSchemas.midlewareValidateSchema("login"), function(req, res, next) {
+    db.query("SELECT * FROM usuarios WHERE login = ? AND password = ?",
         [req.body.login, req.body.password],
         function(error, results, fields) {
             if (error) {
-                res
-                    .status(400)
-                    .json({ code: "ERROR_LOGIN", msg: "Error al autenticarse." });
+                resultJson.error(res, 400, errorMessages.msgs.authUser);
             }
             else {
+                //console.log(errorMessages.lineOfCode());
                 if(results.length == 0) {
-                    res.json({ validLogin: false });
+                    resultJson.ok(res, { validLogin: false });
                 }
                 else {
-                    res.json({ validLogin: true });
+                    resultJson.ok(res, { validLogin: true, token: token.encode(req.body.login) });
                 }
             }
 
         });
 });
 
-router.post('/register', midlewareValidateSchema("register"), function(req, res, next) {
-    connection.query("SELECT * FROM usuarios WHERE login = ?",
+router.post('/register', checkSchemas.midlewareValidateSchema("register"), function(req, res, next) {
+    db.query("SELECT * FROM usuarios WHERE login = ?",
         [req.body.login],
         function(error, results, fields) {
             if (error) {
-                res
-                    .status(400)
-                    .json({ code: "ERROR_REGISTRARSE", msg: "Error al registrarse." });
+                resultJson.error(res, 400, errorMessages.msgs.registerUser);
             }
             if(results.length != 0) {
-                res.json({ validUser: false, msg: "Duplicate user." });
+                resultJson.ok(res, { validUser: false }, "Duplicate user.");
             }
             else {
-                connection.query("INSERT INTO usuarios(name, login, password) VALUES(?, ?, ?)",
+                db.query("INSERT INTO usuarios(name, login, password) VALUES(?, ?, ?)",
                     [req.body.name, req.body.login, req.body.password],
                     function(error, results, fields) {
                         if (error) {
-                            res
-                                .status(400)
-                                .json({ code: "ERROR_REGISTRARSE", msg: "Error al registrarse." });
+                            resultJson.error(res, 400, errorMessages.msgs.authUser);
                         }
-                        res.json({ validUser: true });
-                        console.log(results);
+                        resultJson.ok(res, { validUser: true });
                     });
             }
         });
 });
 
-router.get('/listUsuarios', midlewareAuth, function(req, res, next) {
-    connection.query('SELECT * FROM usuarios', function (error, results, fields) {
+router.post('/listUsuarios', auth.midlewareAuth, function(req, res, next) {
+
+    db.query('SELECT * FROM usuarios', function (error, results, fields) {
         if (error) {
-            res
-                .status(400)
-                .json({ code: "ERROR_LISTUSUARIOS", msg: "Error al dar la lista de usuarios." });
+            resultJson.error(res, 400, errorMessages.msgs.listUser);
         }
-        res.json({ usersList: results });
+
+        resultJson.ok(res, { usersList: results });
     });
 });
 
